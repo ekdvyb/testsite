@@ -87,13 +87,22 @@
         }
 
         .hero {
-            background: linear-gradient(135deg, rgba(139, 0, 0, 0.95), rgba(185, 28, 28, 0.9)),
+            /* Use the same temple image and overlay as the header (match the JS heroBackground string) */
+            background: linear-gradient(135deg, rgba(139, 0, 0, 0.40), rgba(185, 28, 28, 0.32)),
                         url('https://churchofjesuschristtemples.org/assets/img/temples/harare-zimbabwe-temple/harare-zimbabwe-temple-56161.jpg');
             background-size: cover;
             background-position: center;
             background-attachment: fixed;
             height: 100vh;
             display: flex;
+        .hero {
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            color: white;
+            position: relative;
+            margin-top: 90px;
+        }
             align-items: center;
             justify-content: center;
             text-align: center;
@@ -564,141 +573,434 @@
 </head>
 <body>
     <!-- Header -->
-    <header class="header">
+    <header class="header" style="backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px);">
+        <style>
+            /* stretch nav-container full width and align left / right */
+            .nav-container {
+                max-width: none !important;
+                width: 100%;
+                padding: 0 2rem;
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                gap: 1rem;
+            }
+
+            /* keep logo group pinned left */
+            .logo-section {
+                display: flex;
+                align-items: center;
+                gap: 0.75rem;
+                margin-right: auto;
+            }
+
+            /* nav items pinned right */
+            .nav-links {
+                margin-left: auto;
+                display: flex;
+                gap: 1rem;
+                list-style: none;
+                align-items: center;
+            }
+            .nav-links li { display: inline-block; }
+
+            /* subtle translucent blue header so temple bg shows & slightly blurry */
+            .header {
+                background: linear-gradient(90deg, rgba(11,61,145,0.18), rgba(11,61,145,0.12)) !important;
+                box-shadow: none !important;
+                backdrop-filter: blur(8px);
+                -webkit-backdrop-filter: blur(8px);
+            }
+
+            /* professional gallery background (overrides inline white) */
+            #gallery {
+                background: linear-gradient(180deg, #eef4fb 0%, #e4eefb 100%) !important;
+                color: #102a43;
+                padding: 4rem 2rem;
+            }
+
+            /* keep mobile behavior */
+            @media (max-width: 768px) {
+                .nav-links { display: none; }
+            }
+        </style>
+
         <div class="nav-container">
             <div class="logo-section">
-                <a href="#home" title="Temple Ease Access Home">
-                    <img src="https://i.imgur.com/HXSxQAy.png" alt="Temple Ease Access Logo" class="logo">
+                <a href="#home" title="Temple Ease Access Home" style="display:flex;align-items:center;text-decoration:none;color:inherit;">
+                    <img src="https://i.imgur.com/HXSxQAy.png" alt="Temple Ease Access Logo" class="logo" style="height:60px;display:block;">
+                    <div class="logo-text" style="line-height:1;">
+                        <h1 style="font-size:1.1rem;margin:0;">TEMPLE EASE ACCESS</h1>
+                        <p style="font-size:0.75rem;margin:0;opacity:0.9;">Your Trusted Partner for the Harare Zimbabwe Temple Open House</p>
+                    </div>
                 </a>
-                <div class="logo-text">
-                    <h1>TEMPLE EASE ACCESS</h1>
-                    <p>Your Trusted Partner for the Harare Zimbabwe Temple Open House</p>
-                </div>
             </div>
+
             <nav>
-                <ul class="nav-links">
-                    <li><a href="#home">Home</a></li>
-                    <li><a href="#services">Services</a></li>
-                    <li><a href="#booking">Book Now</a></li>
-                    <li><a href="#contact">Contact</a></li>
+                <ul class="nav-links" role="menubar" aria-label="Main navigation">
+                    <li role="none"><a role="menuitem" href="#home">Home</a></li>
+                    <li role="none"><a role="menuitem" href="#services">Services</a></li>
+                    <li role="none"><a role="menuitem" href="#booking">Book Now</a></li>
+                    <li role="none"><a role="menuitem" href="#contact">Contact</a></li>
+                    
                 </ul>
             </nav>
         </div>
+
+        <!-- Remove login button if present and ensure Contact is the last nav item -->
+        <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            var nav = document.querySelector('.nav-links');
+            if (!nav) return;
+
+            // Remove any login button
+            var loginBtn = nav.querySelector('.login-btn');
+            if (loginBtn) {
+                var loginLi = loginBtn.closest('li') || loginBtn.parentElement;
+                if (loginLi) loginLi.remove();
+                else loginBtn.remove();
+            }
+
+            // Ensure Contact link is the last item (allow other scripts to append items first)
+            setTimeout(function () {
+                var contactAnchor = nav.querySelector('a[href="#contact"]');
+                if (contactAnchor) {
+                    var contactLi = contactAnchor.closest('li') || contactAnchor.parentElement;
+                    if (contactLi) nav.appendChild(contactLi);
+                }
+            }, 75);
+        });
+        </script>
+        <style>
+            /* Adjust header background for a softer appearance */
+            .header {
+            background: linear-gradient(90deg, rgba(11,61,145,0.10), rgba(11,61,145,0.06)) !important;
+            }
+        </style>
+        <script>
+            (function () {
+                try {
+                    var existing = document.querySelector('link[rel~="icon"]');
+                    if (!existing) {
+                        var link = document.createElement('link');
+                        link.rel = 'icon';
+                        link.href = 'https://i.imgur.com/HXSxQAy.png';
+                        document.head.appendChild(link);
+                    } else {
+                        existing.href = existing.href || 'https://i.imgur.com/HXSxQAy.png';
+                    }
+                } catch (e) { /* silent fail */ }
+            })();
+        </script>
     </header>
+<!-- Hero Section -->
+<section id="home" class="hero">
+    <div class="hero-content">
+        <h1>Welcome to Temple Ease Access</h1>
+        <p>Temple Ease Access is your reliable partner for planning and managing temple visits with efficiency and ease. We connect visitors attending the Harare Zimbabwe Temple Open House with verified accommodations, curated dining options, and essential local insights — delivering a seamless experience of convenience, comfort, and cultural connection</p>
+        <p>Experience organized spirituality, simplified.</p>
+        <div class="cta-buttons">
+            <a href="#booking" class="btn btn-primary">📋 Book Your Experience</a>
+            <a href="#services" class="btn btn-secondary">🔍 Explore Services</a>
+        </div>
+    </div>
+</section>
 
-    <!-- Hero Section -->
-    <section id="home" class="hero">
-        <div class="hero-content">
-            <h1>Welcome to Temple Ease Access</h1>
-            <p>Temple Ease Access is your reliable partner for planning and managing temple visits with efficiency and ease. We connect visitors attending the Harare Zimbabwe Temple Open House with verified accommodations, curated dining options, and essential local insights — delivering a seamless experience of convenience, comfort, and cultural connection</p>
-            <p>Experience organized spirituality, simplified.</p>
-            <div class="cta-buttons">
-                <a href="#booking" class="btn btn-primary">📋 Book Your Experience</a>
-                <a href="#services" class="btn btn-secondary">🔍 Explore Services</a>
+<!-- Scroll to Top Button -->
+<button onclick="scrollToTop()" class="scroll-to-top" style="position: fixed; bottom: 100px; right: 30px; padding: 10px 15px; background: #B91C1C; color: white; border: none; border-radius: 5px; cursor: pointer; display: none;">↑ Top</button>
+<!-- Why Choose Us Section -->
+<section class="why-choose-section">
+    <div class="container">
+        <h2 class="section-title">Why Choose Temple Ease Access?</h2>
+        <p class="section-subtitle">Experience the difference with our premium services and unbeatable prices</p>
+        <div class="benefits-grid">
+            <div class="benefit-card">
+                <div class="benefit-icon">💰</div>
+                <h3>Best Pricing Deals</h3>
+                <p>We offer the most competitive prices and exclusive discounts that you won't find anywhere else. Save more while enjoying premium services.</p>
+            </div>
+            <div class="benefit-card">
+                <div class="benefit-icon">🎯</div>
+                <h3>Cheaper Than Direct Booking</h3>
+                <p>Book through us and pay significantly less than direct bookings. We guarantee better rates and exceptional value for your money.</p>
+            </div>
+            <div class="benefit-card">
+                <div class="benefit-icon">⭐</div>
+                <h3>VIP Treatment</h3>
+                <p>Enjoy five-star treatment and exceptional service throughout your temple visit. We prioritize your comfort and satisfaction.</p>
+            </div>
+            <div class="benefit-card">
+                <div class="benefit-icon">🎁</div>
+                <h3>Exclusive Incentives</h3>
+                <p>Access special discounts, bonus services, and exclusive incentives available only to our valued customers.</p>
             </div>
         </div>
-    </section>
+    </div>
+</section>
 
-    <!-- Why Choose Us Section -->
-    <section class="why-choose-section">
-        <div class="container">
-            <h2 class="section-title">Why Choose Temple Ease Access?</h2>
-            <p class="section-subtitle">Experience the difference with our premium services and unbeatable prices</p>
-            <div class="benefits-grid">
-                <div class="benefit-card">
-                    <div class="benefit-icon">💰</div>
-                    <h3>Best Pricing Deals</h3>
-                    <p>We offer the most competitive prices and exclusive discounts that you won't find anywhere else. Save more while enjoying premium services.</p>
+<!-- Scroll to Top Button -->
+<button onclick="scrollToTop()" class="scroll-to-top" style="position: fixed; bottom: 20px; right: 20px; padding: 10px 15px; background: #B91C1C; color: white; border: none; border-radius: 5px; cursor: pointer; display: none;">↑ Top</button>
+
+<!-- Services Section -->
+<section id="services" class="services-section">
+    <div class="container">
+        <h2 class="section-title">Our Premium Services</h2>
+        <p class="section-subtitle">Everything you need for a perfect temple experience</p>
+        <div class="services-grid">
+            <div class="service-card">
+                <img src="https://images.unsplash.com/photo-1566073771259-6a8506099945?w=800&q=80" alt="Luxury Accommodation" class="service-image">
+                <div class="service-content">
+                    <div class="service-icon">🏨</div>
+                    <h3>Accommodation</h3>
+                    <p>Comfortable and secure lodging options near the temple. Choose from budget-friendly to luxury accommodations.</p>
+                    <ul class="service-features">
+                        <li>Verified hotels and guest houses</li>
+                        <li>Walking distance to temple</li>
+                        <li>Safe and secure locations</li>
+                        <li>24/7 customer support</li>
+                    </ul>
                 </div>
-                <div class="benefit-card">
-                    <div class="benefit-icon">🎯</div>
-                    <h3>Cheaper Than Direct Booking</h3>
-                    <p>Book through us and pay significantly less than direct bookings. We guarantee better rates and exceptional value for your money.</p>
+            </div>
+
+            <div class="service-card">
+                <img src="https://images.unsplash.com/photo-1449965408869-eaa3f722e40d?w=800&q=80" alt="Transportation Services" class="service-image">
+                <div class="service-content">
+                    <div class="service-icon">🚗</div>
+                    <h3>Transportation</h3>
+                    <p>Reliable and comfortable transport solutions for your entire journey in Harare.</p>
+                    <ul class="service-features">
+                        <li>Airport transfers included</li>
+                        <li>Professional drivers</li>
+                        <li>Car rentals available</li>
+                        <li>Daily temple shuttle service</li>
+                    </ul>
                 </div>
-                <div class="benefit-card">
-                    <div class="benefit-icon">⭐</div>
-                    <h3>VIP Treatment</h3>
-                    <p>Enjoy five-star treatment and exceptional service throughout your temple visit. We prioritize your comfort and satisfaction.</p>
+            </div>
+
+            <div class="service-card">
+                <img src="https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?w=800&q=80" alt="Fine Dining" class="service-image">
+                <div class="service-content">
+                    <div class="service-icon">🍽️</div>
+                    <h3>Dining</h3>
+                    <p>Access to the best and most reputable restaurants in Harare for quality dining experiences.</p>
+                    <ul class="service-features">
+                        <li>Trusted restaurant partners</li>
+                        <li>Local and international cuisine</li>
+                        <li>Dietary requirements catered</li>
+                        <li>Quality assured experiences</li>
+                    </ul>
                 </div>
-                <div class="benefit-card">
-                    <div class="benefit-icon">🎁</div>
-                    <h3>Exclusive Incentives</h3>
-                    <p>Access special discounts, bonus services, and exclusive incentives available only to our valued customers.</p>
+            </div>
+
+            <div class="service-card">
+                <img src="https://images.unsplash.com/photo-1469854523086-cc02fe5d8800?w=800&q=80" alt="Activities and Tours" class="service-image">
+                <div class="service-content">
+                    <div class="service-icon">🎯</div>
+                    <h3>Activities & Tours</h3>
+                    <p>Discover Zimbabwe with our carefully curated tours and recreational activities.</p>
+                    <ul class="service-features">
+                        <li>Victoria Falls day trips</li>
+                        <li>Harare city tours</li>
+                        <li>Cultural experiences</li>
+                        <li>Wildlife park excursions</li>
+                    </ul>
                 </div>
             </div>
         </div>
-    </section>
+    </div>
+</section>
 
-    <!-- Services Section -->
-    <section id="services" class="services-section">
-        <div class="container">
-            <h2 class="section-title">Our Premium Services</h2>
-            <p class="section-subtitle">Everything you need for a perfect temple experience</p>
-            <div class="services-grid">
-                <div class="service-card">
-                    <img src="https://images.unsplash.com/photo-1566073771259-6a8506099945?w=800&q=80" alt="Luxury Accommodation" class="service-image">
-                    <div class="service-content">
-                        <div class="service-icon">🏨</div>
-                        <h3>Accommodation</h3>
-                        <p>Comfortable and secure lodging options near the temple. Choose from budget-friendly to luxury accommodations.</p>
-                        <ul class="service-features">
-                            <li>Verified hotels and guest houses</li>
-                            <li>Walking distance to temple</li>
-                            <li>Safe and secure locations</li>
-                            <li>24/7 customer support</li>
-                        </ul>
-                    </div>
-                </div>
+<script>
+function scrollToTop() {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+}
 
-                <div class="service-card">
-                    <img src="https://images.unsplash.com/photo-1449965408869-eaa3f722e40d?w=800&q=80" alt="Transportation Services" class="service-image">
-                    <div class="service-content">
-                        <div class="service-icon">🚗</div>
-                        <h3>Transportation</h3>
-                        <p>Reliable and comfortable transport solutions for your entire journey in Harare.</p>
-                        <ul class="service-features">
-                            <li>Airport transfers included</li>
-                            <li>Professional drivers</li>
-                            <li>Car rentals available</li>
-                            <li>Daily temple shuttle service</li>
-                        </ul>
-                    </div>
-                </div>
+// Show/hide scroll to top button
+window.onscroll = function() {
+    const button = document.querySelector('.scroll-to-top');
+    if (document.body.scrollTop > 100 || document.documentElement.scrollTop > 100) {
+        button.style.display = 'block';
+    } else {
+        button.style.display = 'none';
+    }
+};
+</script>
+<!-- Enhanced header + buttons styling and small DOM updates -->
+<style>
+/* Refreshed professional deep-blue gradient for header */
+.header {
+    background: linear-gradient(90deg, #0b61c3 0%, #0b3d91 100%) !important;
+}
 
-                <div class="service-card">
-                    <img src="https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?w=800&q=80" alt="Fine Dining" class="service-image">
-                    <div class="service-content">
-                        <div class="service-icon">🍽️</div>
-                        <h3>Dining</h3>
-                        <p>Access to the best and most reputable restaurants in Harare for quality dining experiences.</p>
-                        <ul class="service-features">
-                            <li>Trusted restaurant partners</li>
-                            <li>Local and international cuisine</li>
-                            <li>Dietary requirements catered</li>
-                            <li>Quality assured experiences</li>
-                        </ul>
-                    </div>
-                </div>
+/* Professional nav links */
+.nav-links a {
+    background: rgba(255,255,255,0.06);
+    border: 1px solid rgba(255,255,255,0.08);
+    padding: 10px 14px;
+    border-radius: 8px;
+    color: #ffffff;
+    font-weight: 600;
+    box-shadow: none;
+}
 
-                <div class="service-card">
-                    <img src="https://images.unsplash.com/photo-1469854523086-cc02fe5d8800?w=800&q=80" alt="Activities and Tours" class="service-image">
-                    <div class="service-content">
-                        <div class="service-icon">🎯</div>
-                        <h3>Activities & Tours</h3>
-                        <p>Discover Zimbabwe with our carefully curated tours and recreational activities.</p>
-                        <ul class="service-features">
-                            <li>Victoria Falls day trips</li>
-                            <li>Harare city tours</li>
-                            <li>Cultural experiences</li>
-                            <li>Wildlife park excursions</li>
-                        </ul>
-                    </div>
-                </div>
-            </div>
+/* Hover state */
+.nav-links a:hover {
+    background: rgba(255,255,255,0.12);
+    transform: translateY(-2px);
+}
+
+/* Refined hero CTA buttons */
+.btn {
+    border-radius: 8px !important;
+    padding: 12px 22px !important;
+    font-size: 1rem !important;
+    box-shadow: 0 6px 18px rgba(2,6,23,0.18) !important;
+    border: none;
+}
+
+/* Primary / secondary color tweaks */
+.btn-primary {
+    background: linear-gradient(90deg,#ff7a18,#af002d) !important;
+    color: #fff !important;
+}
+.btn-secondary {
+    background: transparent !important;
+    color: #fff !important;
+    border: 1px solid rgba(255,255,255,0.18) !important;
+}
+
+/* Login button style (nav) */
+.nav-links .login-btn {
+    background: #fff;
+    color: #0f2a66;
+    border-radius: 8px;
+    padding: 8px 14px;
+    font-weight: 700;
+    margin-left: 6px;
+    box-shadow: 0 6px 16px rgba(15,42,102,0.12);
+    text-decoration: none;
+}
+
+/* Slightly compact header elements */
+.logo { height: 60px; }
+.logo-text h1 { font-size: 1.25rem; }
+
+/* Smooth transitions */
+.nav-links a, .nav-links .login-btn, .btn { transition: all 0.25s ease; }
+
+/* Make temple background image more visible (lighter gradient overlay) */
+.hero {
+    /* keep the temple image but reduce the dark/red overlay so image shows through */
+    background: linear-gradient(135deg, rgba(139, 0, 0, 0.40), rgba(185, 28, 28, 0.32)),
+                url('https://churchofjesuschristtemples.org/assets/img/temples/harare-zimbabwe-temple/harare-zimbabwe-temple-56161.jpg') !important;
+    background-size: cover !important;
+    background-position: center !important;
+    background-attachment: fixed !important;
+}
+
+/* soften the extra radial darkening so the photo remains visible */
+.hero::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: radial-gradient(circle at center, transparent 0%, rgba(0,0,0,0.18) 100%);
+}
+
+/* keep hero text readable with subtle shadow */
+.hero-content h1, .hero-content p {
+    text-shadow: 1px 1px 6px rgba(0,0,0,0.45);
+}
+</style>
+
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    // Rename "Book Now" nav link to "Booking"
+    var bookLink = document.querySelector('.nav-links a[href="#booking"]');
+    if (bookLink) bookLink.textContent = 'Booking';
+
+    
+    }
+// Clean hero CTA labels (remove emoji for a cleaner professional look)
+document.querySelectorAll('.hero .cta-buttons .btn').forEach(function (btn) {
+    btn.textContent = btn.textContent.replace(/^[^\w]*/u, '').trim();
+    btn.setAttribute('aria-label', btn.textContent);
+}
+
+// Match header and hero section styles
+const heroBackground = "linear-gradient(135deg, rgba(139, 0, 0, 0.40), rgba(185, 28, 28, 0.32)), url('https://churchofjesuschristtemples.org/assets/img/temples/harare-zimbabwe-temple/harare-zimbabwe-temple-56161.jpg')";
+
+// Set header background
+const header = document.querySelector('.header');
+if (header) {
+    header.style.background = heroBackground;
+    header.style.backgroundSize = 'cover';
+    header.style.backgroundPosition = 'center';
+    header.style.backgroundAttachment = 'fixed';
+}
+
+// Add some shadow to header text for better readability
+const logoText = document.querySelector('.logo-text');
+if (logoText) {
+    logoText.style.textShadow = '1px 1px 6px rgba(0,0,0,0.45)';
+    logoText.style.color = 'white';
+}
+
+// Style nav links for better visibility
+const navLinks = document.querySelectorAll('.nav-links a');
+navLinks.forEach(link => {
+    link.style.color = 'white';
+    link.style.textShadow = '1px 1px 6px rgba(0,0,0,0.45)';
+});
+
+</script>
+<section id="gallery" class="services-section" style="background: #f8f9fa;"></section>
+    <div class="container">
+        <h2 class="section-title">Gallery</h2>
+        <p class="section-subtitle">Visual tour of our accommodations and services</p>
+        <div style="text-align: center; padding: 50px; background: white; border-radius: 10px; box-shadow: 0 2px 10px rgba(0,0,0,0.1);">
+            <div style="font-size: 3rem; margin-bottom: 20px;">🎬</div>
+            <h3 style="color: #B91C1C; margin-bottom: 15px;">Coming Soon!</h3>
+            <p>Our gallery section is under construction. Check back at launch for beautiful photos and videos of our accommodations, facilities, and experiences.</p>
         </div>
-    </section>
+    </div>
+</section>
 
-   <!-- Booking Section -->
+<!-- Catalog Section -->
+<section id="catalog" class="services-section"></section>
+    <div class="container">
+        <h2 class="section-title">Price Catalog</h2>
+        <p class="section-subtitle">Transparent pricing for all our services</p>
+        <div style="text-align: center; padding: 50px; background: white; border-radius: 10px; box-shadow: 0 2px 10px rgba(0,0,0,0.1);">
+            <div style="font-size: 3rem; margin-bottom: 20px;">💰</div>
+            <h3 style="color: #B91C1C; margin-bottom: 15px;">Price Updates Coming Soon!</h3>
+            <p>Our comprehensive price catalog will be available at launch. Stay tuned for competitive rates and special package deals.</p>
+        </div>
+    </div>
+</section>
+
+<!-- Add nav buttons for Gallery and Catalog to the top menu and enable smooth scrolling -->
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    // smooth scroll
+    document.documentElement.style.scrollBehavior = 'smooth';
+
+    const nav = document.querySelector('.nav-links');
+    if (!nav) return;
+
+    function addNavItem(href, text) {
+        if (nav.querySelector('a[href="' + href + '"]')) return;
+        const li = document.createElement('li');
+        li.innerHTML = '<a href="' + href + '">' + text + '</a>';
+        nav.appendChild(li);
+    }
+
+    addNavItem('#gallery', 'Gallery');
+    addNavItem('#catalog', 'Catalog');
+});
+</script>
 <section id="booking" class="booking-section">
     <div class="booking-content">
         <h2 class="section-title" style="color: white;">Book Your Temple Experience</h2>
