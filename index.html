@@ -567,7 +567,9 @@
     <header class="header">
         <div class="nav-container">
             <div class="logo-section">
-                <img src="https://i.imgur.com/HXSxQAy.png" alt="Temple Ease Access Logo" class="logo">
+                <a href="#home" title="Temple Ease Access Home">
+                    <img src="https://i.imgur.com/HXSxQAy.png" alt="Temple Ease Access Logo" class="logo">
+                </a>
                 <div class="logo-text">
                     <h1>TEMPLE EASE ACCESS</h1>
                     <p>Your Trusted Partner for the Harare Zimbabwe Temple Open House</p>
@@ -839,7 +841,7 @@
     <!-- Footer -->
     <footer class="footer">
         <div class="footer-container">
-            <!-- Brand Section -->
+            <!-- Logo and Description -->
             <div class="footer-section">
                 <div class="footer-logo-section">
                     <img src="https://i.imgur.com/HXSxQAy.png" alt="Temple Ease Access Logo" class="footer-logo">
@@ -850,26 +852,26 @@
                 <p>Your trusted partner for organized temple visits — connecting you with quality accommodation, transport, and cultural experiences.</p>
             </div>
 
-            <!-- Quick Links -->
-            <div class="footer-section">
-                <h3>Quick Links</h3>
-                <ul>
-                    <li><a href="#home">Home</a></li>
-                    <li><a href="#services">Services</a></li>
-                    <li><a href="#booking">Book Now</a></li>
-                    <li><a href="#contact">Contact</a></li>
-                </ul>
-            </div>
-
-            <!-- Support -->
-            <div class="footer-section">
-                <h3>Support</h3>
-                <ul>
-                    <li><a href="#">FAQs</a></li>
-                    <li><a href="#">Terms & Conditions</a></li>
-                    <li><a href="#">Privacy Policy</a></li>
-                    <li><a href="#">Cancellation Policy</a></li>
-                </ul>
+            <!-- Links Section -->
+            <div class="footer-section" style="display: flex; gap: 4rem;">
+                <div>
+                    <h3>Quick Links</h3>
+                    <ul>
+                        <li><a href="#home">Home</a></li>
+                        <li><a href="#services">Services</a></li>
+                        <li><a href="#booking">Book Now</a></li>
+                        <li><a href="#contact">Contact</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h3>Support</h3>
+                    <ul>
+                        <li><a href="#">FAQs</a></li>
+                        <li><a href="#">Terms & Conditions</a></li>
+                        <li><a href="#">Privacy Policy</a></li>
+                        <li><a href="#">Cancellation Policy</a></li>
+                    </ul>
+                </div>
             </div>
 
             <!-- Contact Info -->
@@ -889,5 +891,29 @@
         </div>
     </footer>
 
-    <!-- WhatsApp Chat Bubble -->
-    <a href="https://wa.me/263714684454?text=Hi%20Temple%20
+    <!-- WhatsApp Chat Widget -->
+    <div id="chat-widget" style="display: none; position: fixed; bottom: 100px; right: 30px; width: 300px; height: 400px; background: white; border-radius: 10px; box-shadow: 0 5px 20px rgba(0,0,0,0.2); z-index: 1000;">
+        <div style="padding: 15px; background: #128C7E; color: white; border-radius: 10px 10px 0 0; display: flex; justify-content: space-between; align-items: center;">
+            <div>
+                <h3 style="margin: 0;">Chat with us</h3>
+                <p style="margin: 5px 0 0; font-size: 0.8rem;">We typically reply within minutes</p>
+            </div>
+            <button onclick="toggleChat()" style="background: none; border: none; color: white; cursor: pointer; font-size: 1.2rem;">×</button>
+        </div>
+        <iframe 
+            src="https://web.whatsapp.com/send?phone=263714684454&text=Hi%20Temple%20Ease%20Access%2C%20I%20would%20like%20to%20inquire%20about%20your%20services." 
+            style="width: 100%; height: calc(100% - 65px); border: none;">
+        </iframe>
+    </div>
+
+    <!-- Chat Bubble -->
+    <div class="chat-bubble" title="Chat with us" onclick="toggleChat()">
+        💬
+    </div>
+
+    <script>
+        function toggleChat() {
+            const chatWidget = document.getElementById('chat-widget');
+            chatWidget.style.display = chatWidget.style.display === 'none' ? 'block' : 'none';
+        }
+    </script>
