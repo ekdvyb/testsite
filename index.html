@@ -1008,42 +1008,229 @@
         </div>
     </section>
 
-    <!-- Why Choose Us Section -->
+    <!-- Why Choose Us Section (Carousel: one card at a time, auto-slide) -->
     <section id="why-choose" class="section why-choose-section">
         <div class="container">
             <h2 class="section-title">Why Choose Temple Ease Access?</h2>
             <p class="section-subtitle">Experience the difference with our premium services and unbeatable value</p>
-            <div class="benefits-grid">
-                <div class="benefit-card">
-                    <div class="benefit-icon">
-                        <i class="fas fa-tag"></i>
+
+            <!-- Carousel -->
+            <div class="carousel" aria-roledescription="carousel">
+                <div class="carousel-track">
+                    <div class="carousel-slide">
+                        <div class="benefit-card carousel-card">
+                            <div class="benefit-icon">
+                                <i class="fas fa-tag"></i>
+                            </div>
+                            <h3>Best Pricing Deals</h3>
+                            <p>We offer the most competitive prices and exclusive discounts that you won't find anywhere else.</p>
+                        </div>
                     </div>
-                    <h3>Best Pricing Deals</h3>
-                    <p>We offer the most competitive prices and exclusive discounts that you won't find anywhere else.</p>
-                </div>
-                <div class="benefit-card">
-                    <div class="benefit-icon">
-                        <i class="fas fa-dollar-sign"></i>
+
+                    <div class="carousel-slide">
+                        <div class="benefit-card carousel-card">
+                            <div class="benefit-icon">
+                                <i class="fas fa-dollar-sign"></i>
+                            </div>
+                            <h3>Cheaper Than Direct Booking</h3>
+                            <p>Book through us and pay significantly less than direct bookings with our guaranteed better rates.</p>
+                        </div>
                     </div>
-                    <h3>Cheaper Than Direct Booking</h3>
-                    <p>Book through us and pay significantly less than direct bookings with our guaranteed better rates.</p>
-                </div>
-                <div class="benefit-card">
-                    <div class="benefit-icon">
-                        <i class="fas fa-crown"></i>
+
+                    <div class="carousel-slide">
+                        <div class="benefit-card carousel-card">
+                            <div class="benefit-icon">
+                                <i class="fas fa-crown"></i>
+                            </div>
+                            <h3>VIP Treatment</h3>
+                            <p>Enjoy five-star treatment and exceptional service throughout your temple visit experience.</p>
+                        </div>
                     </div>
-                    <h3>VIP Treatment</h3>
-                    <p>Enjoy five-star treatment and exceptional service throughout your temple visit experience.</p>
-                </div>
-                <div class="benefit-card">
-                    <div class="benefit-icon">
-                        <i class="fas fa-gift"></i>
+
+                    <div class="carousel-slide">
+                        <div class="benefit-card carousel-card">
+                            <div class="benefit-icon">
+                                <i class="fas fa-gift"></i>
+                            </div>
+                            <h3>Exclusive Incentives</h3>
+                            <p>Access special discounts, bonus services, and exclusive incentives available only to our customers.</p>
+                        </div>
                     </div>
-                    <h3>Exclusive Incentives</h3>
-                    <p>Access special discounts, bonus services, and exclusive incentives available only to our customers.</p>
                 </div>
+
+                <!-- Controls -->
+                <button class="carousel-button prev" aria-label="Previous slide">
+                    <i class="fas fa-chevron-left"></i>
+                </button>
+                <button class="carousel-button next" aria-label="Next slide">
+                    <i class="fas fa-chevron-right"></i>
+                </button>
+
+                <!-- Dots -->
+                <div class="carousel-dots" role="tablist" aria-label="Carousel dots"></div>
             </div>
         </div>
+
+        <style>
+            /* Carousel specific styles (keeps existing benefit-card look but centers & limits width) */
+            .carousel {
+                position: relative;
+                overflow: hidden;
+                margin-top: 2rem;
+            }
+
+            .carousel-track {
+                display: flex;
+                transition: transform 0.6s cubic-bezier(.22,.9,.36,1);
+                will-change: transform;
+            }
+
+            .carousel-slide {
+                min-width: 100%;
+                display: flex;
+                justify-content: center;
+                padding: 1rem;
+            }
+
+            .carousel-card {
+                max-width: 720px;
+                width: 100%;
+                padding: 2.5rem 2rem;
+                text-align: left;
+            }
+
+            /* Slight visual tweak for a more "pro" card */
+            .carousel-card h3 {
+                font-size: 1.5rem;
+                margin-bottom: 0.75rem;
+            }
+
+            .carousel-card p {
+                color: var(--gray);
+                line-height: 1.6;
+            }
+
+            .carousel-button {
+                position: absolute;
+                top: 50%;
+                transform: translateY(-50%);
+                background: rgba(26,54,93,0.9);
+                color: #fff;
+                border: none;
+                width: 44px;
+                height: 44px;
+                border-radius: 50%;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                box-shadow: var(--shadow-lg);
+                cursor: pointer;
+                transition: transform 0.2s ease, background 0.2s ease;
+                z-index: 10;
+            }
+
+            .carousel-button:hover { transform: translateY(-50%) scale(1.05); background: var(--primary-light); }
+
+            .carousel-button.prev { left: 12px; }
+            .carousel-button.next { right: 12px; }
+
+            .carousel-dots {
+                display: flex;
+                gap: 8px;
+                justify-content: center;
+                margin-top: 1.25rem;
+            }
+
+            .carousel-dot {
+                width: 10px;
+                height: 10px;
+                background: #cbd5e1;
+                border-radius: 50%;
+                border: none;
+                cursor: pointer;
+                transition: background 0.2s ease, transform 0.2s ease;
+            }
+
+            .carousel-dot[aria-selected="true"] {
+                background: var(--secondary);
+                transform: scale(1.15);
+                box-shadow: 0 2px 8px rgba(197,48,48,0.2);
+            }
+
+            /* Responsive tweaks */
+            @media (max-width: 768px) {
+                .carousel-card { padding: 1.5rem; }
+                .carousel-button { width: 40px; height: 40px; }
+            }
+        </style>
+
+        <script>
+            (function () {
+                const carousel = document.querySelector('#why-choose .carousel');
+                const track = carousel.querySelector('.carousel-track');
+                const slides = Array.from(track.children);
+                const prevBtn = carousel.querySelector('.carousel-button.prev');
+                const nextBtn = carousel.querySelector('.carousel-button.next');
+                const dotsContainer = carousel.querySelector('.carousel-dots');
+                let current = 0;
+                let autoTimer = null;
+                const AUTO_DELAY = 4500;
+
+                // build dots
+                slides.forEach((_, i) => {
+                    const btn = document.createElement('button');
+                    btn.className = 'carousel-dot';
+                    btn.setAttribute('aria-selected', i === 0 ? 'true' : 'false');
+                    btn.setAttribute('aria-label', 'Show slide ' + (i + 1));
+                    btn.addEventListener('click', () => goTo(i));
+                    dotsContainer.appendChild(btn);
+                });
+                const dots = Array.from(dotsContainer.children);
+
+                function goTo(index) {
+                    current = (index + slides.length) % slides.length;
+                    const x = -current * carousel.offsetWidth;
+                    track.style.transform = `translateX(${x}px)`;
+                    updateDots();
+                }
+
+                function updateDots() {
+                    dots.forEach((d, i) => d.setAttribute('aria-selected', i === current ? 'true' : 'false'));
+                }
+
+                function next() { goTo(current + 1); }
+                function prev() { goTo(current - 1); }
+
+                nextBtn.addEventListener('click', () => { next(); resetAuto(); });
+                prevBtn.addEventListener('click', () => { prev(); resetAuto(); });
+
+                // pause on hover/focus
+                carousel.addEventListener('mouseenter', stopAuto);
+                carousel.addEventListener('mouseleave', startAuto);
+                carousel.addEventListener('focusin', stopAuto);
+                carousel.addEventListener('focusout', startAuto);
+
+                // responsive: recalc on resize
+                window.addEventListener('resize', () => goTo(current));
+
+                // auto-play
+                function startAuto() {
+                    stopAuto();
+                    autoTimer = setInterval(next, AUTO_DELAY);
+                }
+                function stopAuto() {
+                    if (autoTimer) { clearInterval(autoTimer); autoTimer = null; }
+                }
+                function resetAuto() {
+                    stopAuto();
+                    startAuto();
+                }
+
+                // init
+                goTo(0);
+                startAuto();
+            })();
+        </script>
     </section>
 
     <!-- Services Section -->
