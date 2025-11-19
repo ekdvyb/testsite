@@ -993,6 +993,65 @@
                 </ul>
             </nav>
         </div>
+
+        <script>
+            // Create a circular favicon from the .logo image and inject into <head>
+            (function () {
+                function setFavicon(href) {
+                    let link = document.getElementById('dynamic-favicon');
+                    if (!link) {
+                        link = document.createElement('link');
+                        link.id = 'dynamic-favicon';
+                        link.rel = 'icon';
+                        document.head.appendChild(link);
+                    }
+                    link.href = href;
+                }
+
+                const logo = document.querySelector('.logo');
+                if (!logo || !logo.src) return;
+
+                const img = new Image();
+                // attempt CORS to allow canvas extraction; if the host doesn't allow it, onerror fallback will use original src
+                img.crossOrigin = 'Anonymous';
+                img.src = logo.src;
+
+                img.onload = function () {
+                    const size = 64; // favicon size (64x64 for good quality)
+                    const canvas = document.createElement('canvas');
+                    canvas.width = size;
+                    canvas.height = size;
+                    const ctx = canvas.getContext('2d');
+
+                    // draw circular clip
+                    ctx.clearRect(0, 0, size, size);
+                    ctx.save();
+                    ctx.beginPath();
+                    ctx.arc(size / 2, size / 2, size / 2, 0, Math.PI * 2);
+                    ctx.closePath();
+                    ctx.clip();
+
+                    // cover-fill the canvas with the image while preserving aspect ratio (center-crop)
+                    const iw = img.width, ih = img.height;
+                    const scale = Math.max(size / iw, size / ih);
+                    const dw = iw * scale;
+                    const dh = ih * scale;
+                    const dx = (size - dw) / 2;
+                    const dy = (size - dh) / 2;
+                    ctx.drawImage(img, dx, dy, dw, dh);
+
+                    ctx.restore();
+
+                    const dataUrl = canvas.toDataURL('image/png');
+                    setFavicon(dataUrl);
+                };
+
+                img.onerror = function () {
+                    // fallback to using the original image URL as favicon if canvas extraction fails
+                    setFavicon(logo.src);
+                };
+            })();
+        </script>
     </header>
 
     <!-- Hero Section -->
