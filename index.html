@@ -821,45 +821,48 @@
         </div>
     </footer>
 
-    <script src="https://cdn.jsdelivr.net/npm/emailjs-com@3/dist/email.min.js"></script>
-    <script>
-        // --- 1. Initialize EmailJS ---
+    <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
+<script>
+    // --- 1. Initialize EmailJS ---
+    (function() {
         emailjs.init('F_9z1b_d448pFE4-L'); 
+    })();
 
-        // --- 2. Scroll Animation Observer ---
-        const observer = new IntersectionObserver((entries) => {
-            entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    entry.target.classList.add('active');
-                }
-            });
-        }, { threshold: 0.1 });
-
-        document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
-
-        // --- 3. Smart Header Hide/Show ---
-        let lastScroll = 0;
-        window.addEventListener('scroll', () => {
-            const currentScroll = window.pageYOffset;
-            const header = document.getElementById('header');
-            
-            if (currentScroll > 100) {
-                header.classList.add('scrolled');
-                if (currentScroll > lastScroll) {
-                    header.classList.add('hidden'); // Scroll Down -> Hide
-                } else {
-                    header.classList.remove('hidden'); // Scroll Up -> Show
-                }
-            } else {
-                header.classList.remove('scrolled');
-                header.classList.remove('hidden');
+    // --- 2. Scroll Animation Observer ---
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                entry.target.classList.add('active');
             }
-            lastScroll = currentScroll;
         });
+    }, { threshold: 0.1 });
 
-        // --- 4. Mobile Menu ---
-        const menuToggle = document.querySelector('.menu-toggle');
-        const navMenu = document.querySelector('.nav-menu');
+    document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+
+    // --- 3. Smart Header Hide/Show ---
+    let lastScroll = 0;
+    window.addEventListener('scroll', () => {
+        const currentScroll = window.pageYOffset;
+        const header = document.getElementById('header');
+        
+        if (currentScroll > 100) {
+            header.classList.add('scrolled');
+            if (currentScroll > lastScroll) {
+                header.classList.add('hidden'); // Scroll Down -> Hide
+            } else {
+                header.classList.remove('hidden'); // Scroll Up -> Show
+            }
+        } else {
+            header.classList.remove('scrolled');
+            header.classList.remove('hidden');
+        }
+        lastScroll = currentScroll;
+    });
+
+    // --- 4. Mobile Menu ---
+    const menuToggle = document.querySelector('.menu-toggle');
+    const navMenu = document.querySelector('.nav-menu');
+    if (menuToggle) {
         menuToggle.addEventListener('click', () => {
             navMenu.classList.toggle('active');
             const icon = menuToggle.querySelector('i');
@@ -880,85 +883,111 @@
                 menuToggle.querySelector('i').classList.add('fa-bars');
             });
         });
+    }
 
-        // --- 5. Booking Logic & Modal ---
-        let guestCount = 1;
+    // --- 5. Booking Logic & Modal ---
+    let guestCount = 1;
 
-        function adjustGuests(num) {
-            guestCount += num;
-            if(guestCount < 1) guestCount = 1;
-            if(guestCount > 20) guestCount = 20;
-            document.getElementById('guestCount').textContent = guestCount + (guestCount === 1 ? ' Guest' : ' Guests');
-            document.getElementById('guests').value = guestCount;
+    function adjustGuests(num) {
+        guestCount += num;
+        if(guestCount < 1) guestCount = 1;
+        if(guestCount > 20) guestCount = 20;
+        // Check if elements exist before updating to prevent errors
+        const countDisplay = document.getElementById('guestCount');
+        const countInput = document.getElementById('guests');
+        if(countDisplay) countDisplay.textContent = guestCount + (guestCount === 1 ? ' Guest' : ' Guests');
+        if(countInput) countInput.value = guestCount;
+    }
+
+    function selectOption(element, type, value) {
+        const parent = element.parentElement;
+        const siblings = parent.querySelectorAll(`.option-tab[onclick*="'${type}'"]`);
+        siblings.forEach(sib => sib.classList.remove('active'));
+        element.classList.add('active');
+        
+        if(type === 'transport') {
+            const transportInput = document.getElementById('selectedTransport');
+            if(transportInput) transportInput.value = value === 'shuttle' ? 'Temple Shuttle' : 'Private Chauffeur';
+        }
+        if(type === 'accom') {
+            const accomInput = document.getElementById('selectedAccom');
+            if(accomInput) accomInput.value = value === 'standard' ? 'Standard Room' : 'Luxury Suite';
+        }
+    }
+
+    function openModal() {
+        const modal = document.getElementById('successModal');
+        if(modal) modal.classList.add('active');
+    }
+
+    function closeModal() {
+        const modal = document.getElementById('successModal');
+        if(modal) modal.classList.remove('active');
+    }
+
+    function submitBooking(e) {
+        e.preventDefault();
+        const form = e.target;
+        
+        if(!form.checkValidity()) {
+            alert('Please fill out all required fields.');
+            return;
         }
 
-        function selectOption(element, type, value) {
-            const parent = element.parentElement;
-            const siblings = parent.querySelectorAll(`.option-tab[onclick*="'${type}'"]`);
-            siblings.forEach(sib => sib.classList.remove('active'));
-            element.classList.add('active');
-            if(type === 'transport') document.getElementById('selectedTransport').value = value;
-            if(type === 'accom') document.getElementById('selectedAccom').value = value;
-        }
+        const btn = form.querySelector('button[type="submit"]');
+        const originalText = btn.innerHTML;
+        btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Sending...';
+        btn.disabled = true;
 
-        function openModal() {
-            document.getElementById('successModal').classList.add('active');
-        }
+        // --- UPDATED LOGIC START ---
+        // 1. Get the individual values
+        const transportVal = document.getElementById('selectedTransport').value || 'Not Selected';
+        const accomVal = document.getElementById('selectedAccom').value || 'Not Selected';
 
-        function closeModal() {
-            document.getElementById('successModal').classList.remove('active');
-        }
+        // 2. Combine them into one string for the {{services}} variable
+        const servicesString = `Transport: ${transportVal}\nAccommodation: ${accomVal}`;
 
-        function submitBooking(e) {
-            e.preventDefault();
-            const form = e.target;
-            
-            if(!form.checkValidity()) {
-                alert('Please fill out all required fields.');
-                return;
-            }
+        // 3. Prepare params strictly matching your new Template
+        const params = {
+            firstName: form.firstName.value,
+            lastName: form.lastName.value,
+            phone: form.phone.value, // Matches {{phone}}
+            checkin: document.getElementById('checkin').value,
+            checkout: document.getElementById('checkout').value,
+            guests: guestCount,
+            services: servicesString, // Matches {{services}}
+            message: form.message.value
+        };
+        // --- UPDATED LOGIC END ---
 
-            const params = {
-                firstName: form.firstName.value,
-                lastName: form.lastName.value,
-                phone: form.phone.value,
-                checkin: document.getElementById('checkin').value,
-                checkout: document.getElementById('checkout').value,
-                guests: guestCount,
-                transport: document.getElementById('selectedTransport').value || 'Not Selected',
-                accommodation: document.getElementById('selectedAccom').value || 'Not Selected',
-                message: form.message.value
-            };
-
-            const btn = form.querySelector('button[type="submit"]');
-            const originalText = btn.innerHTML;
-            btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Sending...';
-            btn.disabled = true;
-
-            emailjs.send('service_fbuj47b', 'template_4awkswh', params)
-                .then(() => {
-                    // Success! Show new modal
-                    openModal();
-                    form.reset();
-                    btn.innerHTML = '<i class="fas fa-check"></i> Sent!';
-                    setTimeout(() => {
-                        btn.innerHTML = originalText;
-                        btn.disabled = false;
-                    }, 3000);
-                })
-                .catch((err) => {
-                    console.error('Email error:', err);
-                    alert('There was an error sending your request. Please message us on WhatsApp directly.');
+        emailjs.send('service_fbuj47b', 'template_4awkswh', params)
+            .then(() => {
+                // Success! Show new modal
+                openModal();
+                form.reset();
+                // Reset guest count visually
+                guestCount = 1;
+                adjustGuests(0); 
+                
+                btn.innerHTML = '<i class="fas fa-check"></i> Sent!';
+                setTimeout(() => {
                     btn.innerHTML = originalText;
                     btn.disabled = false;
-                });
-        }
+                }, 3000);
+            })
+            .catch((err) => {
+                console.error('Email error:', err);
+                alert('There was an error sending your request. Please message us on WhatsApp directly.');
+                btn.innerHTML = originalText;
+                btn.disabled = false;
+            });
+    }
 
-        // --- 6. Back to Top & Chat Toggle (NEW) ---
-        
-        // Back to Top Logic
-        const backToTopBtn = document.getElementById('backToTop');
-        
+    // --- 6. Back to Top & Chat Toggle ---
+    
+    // Back to Top Logic
+    const backToTopBtn = document.getElementById('backToTop');
+    if(backToTopBtn) {
         window.addEventListener('scroll', () => {
             if (window.scrollY > 300) {
                 backToTopBtn.classList.add('visible');
@@ -973,30 +1002,39 @@
                 behavior: 'smooth'
             });
         });
+    }
 
-        // Chat Toggle Logic
-        function toggleChat() {
-            const menu = document.getElementById('chatMenu');
-            const bubble = document.getElementById('chatBubble');
+    // Chat Toggle Logic
+    function toggleChat() {
+        const menu = document.getElementById('chatMenu');
+        const bubble = document.getElementById('chatBubble');
+        if(menu && bubble) {
             menu.classList.toggle('active');
             bubble.classList.toggle('active');
         }
+    }
 
-        // Close chat if clicking outside
-        document.addEventListener('click', function(event) {
-            const menu = document.getElementById('chatMenu');
-            const bubble = document.getElementById('chatBubble');
+    // Close chat if clicking outside
+    document.addEventListener('click', function(event) {
+        const menu = document.getElementById('chatMenu');
+        const bubble = document.getElementById('chatBubble');
+        
+        if (menu && bubble) {
             const isClickInside = menu.contains(event.target) || bubble.contains(event.target);
-            
             if (!isClickInside && menu.classList.contains('active')) {
                 menu.classList.remove('active');
                 bubble.classList.remove('active');
             }
-        });
-        
-        const today = new Date().toISOString().split('T')[0];
-        document.getElementById('checkin').min = today;
-        document.getElementById('checkout').min = today;
-    </script>
+        }
+    });
+    
+    // Set Minimum Dates to Today
+    const today = new Date().toISOString().split('T')[0];
+    const checkinInput = document.getElementById('checkin');
+    const checkoutInput = document.getElementById('checkout');
+    if(checkinInput) checkinInput.min = today;
+    if(checkoutInput) checkoutInput.min = today;
+
+</script>
 </body>
 </html>
