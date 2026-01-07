@@ -1,0 +1,754 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Temple Ease Access | Premium Temple Visits</title>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700&family=Montserrat:wght@400;600;700;800&display=swap" rel="stylesheet">
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <style>
+        /* --- MODERN VARIABLES --- */
+        :root {
+            --primary: #1a365d;       /* Deep Navy */
+            --primary-dark: #102a4e;
+            --accent: #d69e2e;        /* Gold */
+            --accent-glow: rgba(214, 158, 46, 0.3);
+            --secondary: #c53030;     /* Red */
+            --text-dark: #1f2937;
+            --text-light: #6b7280;
+            --white: #ffffff;
+            --off-white: #f8fafc;
+            --glass: rgba(255, 255, 255, 0.95);
+            --glass-strong: rgba(255, 255, 255, 0.85);
+            --blur: 12px;
+            --shadow-sm: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            --shadow-lg: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+            --radius: 16px;
+            --transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        /* --- RESET & BASE --- */
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        html { scroll-behavior: smooth; font-size: 16px; }
+        body {
+            font-family: 'Lato', sans-serif;
+            color: var(--text-dark);
+            background-color: var(--off-white);
+            overflow-x: hidden;
+            line-height: 1.7;
+        }
+
+        h1, h2, h3, h4, h5 { font-family: 'Montserrat', sans-serif; line-height: 1.2; color: var(--primary); }
+        a { text-decoration: none; color: inherit; transition: var(--transition); }
+        img { max-width: 100%; display: block; }
+        ul { list-style: none; }
+
+        .container { max-width: 1280px; margin: 0 auto; padding: 0 1.5rem; }
+        .section { padding: 6rem 0; position: relative; }
+
+        /* --- SCROLL ANIMATIONS --- */
+        .reveal {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 0.8s ease-out;
+        }
+        .reveal.active { opacity: 1; transform: translateY(0); }
+
+        /* --- HEADER & NAV --- */
+        .header {
+            position: fixed; top: 0; left: 0; width: 100%;
+            background: rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(var(--blur));
+            z-index: 1000;
+            transition: transform 0.3s ease, background 0.3s ease;
+            box-shadow: var(--shadow-sm);
+        }
+        .header.hidden { transform: translateY(-100%); }
+        .header.scrolled { background: rgba(255, 255, 255, 0.98); }
+
+        .nav-container { display: flex; justify-content: space-between; align-items: center; padding: 0.8rem 1.5rem; }
+        
+        .logo-box { display: flex; align-items: center; gap: 0.8rem; }
+        .logo-box img { height: 45px; }
+        .logo-text h1 { font-size: 1.1rem; font-weight: 800; letter-spacing: -0.5px; margin: 0; }
+        .logo-text p { font-size: 0.7rem; color: var(--text-light); margin: 0; font-weight: 600; text-transform: uppercase; letter-spacing: 1px; }
+
+        .nav-menu { display: flex; gap: 2rem; }
+        .nav-link { font-weight: 600; font-size: 0.95rem; position: relative; color: var(--primary); }
+        .nav-link::after {
+            content: ''; position: absolute; bottom: -4px; left: 0; width: 0; height: 2px;
+            background: var(--accent); transition: var(--transition);
+        }
+        .nav-link:hover::after { width: 100%; }
+
+        .nav-btn {
+            background: var(--primary); color: var(--white); padding: 0.6rem 1.5rem;
+            border-radius: 50px; font-weight: 600; font-size: 0.9rem;
+            box-shadow: 0 4px 15px rgba(26, 54, 93, 0.3);
+        }
+        .nav-btn:hover { transform: translateY(-2px); box-shadow: 0 8px 20px rgba(26, 54, 93, 0.4); }
+
+        .menu-toggle { display: none; font-size: 1.5rem; color: var(--primary); background: none; border: none; cursor: pointer; }
+
+        /* --- HERO SECTION --- */
+        .hero {
+            height: 100vh; min-height: 600px; display: flex; align-items: center;
+            position: relative; overflow: hidden; margin-top: 0;
+        }
+        .hero-bg {
+            position: absolute; inset: 0; z-index: -2;
+            background: url('https://images.unsplash.com/photo-1534298540083-3e165f93e105?ixlib=rb-4.1.0&auto=format&fit=crop&q=80&w=1470') center/cover no-repeat fixed;
+        }
+        .hero-overlay {
+            position: absolute; inset: 0; z-index: -1;
+            background: linear-gradient(135deg, rgba(26, 54, 93, 0.9), rgba(26, 54, 93, 0.6), rgba(197, 48, 48, 0.4));
+        }
+
+        .hero-content {
+            width: 100%; max-width: 1280px; margin: 0 auto; padding: 0 1.5rem;
+            color: var(--white); z-index: 1; margin-top: 4rem;
+        }
+        
+        /* Notice Badge in Hero */
+        .notice-badge {
+            display: inline-flex; align-items: center; gap: 0.5rem;
+            background: rgba(255, 255, 255, 0.15); backdrop-filter: blur(5px);
+            padding: 0.5rem 1rem; border-radius: 50px; border: 1px solid rgba(255,255,255,0.3);
+            font-size: 0.85rem; font-weight: 600; margin-bottom: 1.5rem;
+            animation: slideDown 1s ease-out;
+        }
+        .notice-badge i { color: #ffd700; }
+
+        .hero h1 {
+            font-size: clamp(2.5rem, 5vw, 4.5rem); font-weight: 800; margin-bottom: 1.5rem;
+            line-height: 1.1; letter-spacing: -1px; color: var(--white);
+            text-shadow: 0 2px 10px rgba(0,0,0,0.3);
+        }
+        .hero p {
+            font-size: clamp(1.1rem, 2vw, 1.3rem); margin-bottom: 2.5rem;
+            max-width: 600px; color: rgba(255, 255, 255, 0.9);
+        }
+
+        .hero-btns { display: flex; gap: 1rem; flex-wrap: wrap; }
+        .btn {
+            padding: 1rem 2rem; border-radius: 50px; font-weight: 700; cursor: pointer;
+            display: inline-flex; align-items: center; gap: 0.5rem; transition: var(--transition);
+        }
+        .btn-primary { background: var(--accent); color: var(--primary-dark); border: none; }
+        .btn-primary:hover { background: #f6e05e; transform: translateY(-3px); box-shadow: 0 10px 20px rgba(214, 158, 46, 0.4); }
+        .btn-glass { background: rgba(255,255,255,0.1); backdrop-filter: blur(5px); border: 2px solid rgba(255,255,255,0.5); color: var(--white); }
+        .btn-glass:hover { background: var(--white); color: var(--primary); border-color: var(--white); }
+
+        /* --- NOTICE BOARD SECTION --- */
+        .notice-section { margin-top: -3rem; position: relative; z-index: 10; padding-bottom: 2rem; }
+        .notice-card {
+            background: var(--white); border-radius: var(--radius); padding: 1.5rem;
+            box-shadow: var(--shadow-lg); display: flex; align-items: center; gap: 1.5rem;
+            border-left: 6px solid var(--secondary);
+        }
+        .notice-icon {
+            width: 50px; height: 50px; background: rgba(197, 48, 48, 0.1); border-radius: 50%;
+            display: flex; align-items: center; justify-content: center; color: var(--secondary); font-size: 1.5rem;
+            flex-shrink: 0;
+        }
+
+        /* --- WHY CHOOSE US (Modern Grid) --- */
+        .features-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 2rem; margin-top: 3rem; }
+        .feature-box {
+            background: var(--white); padding: 2.5rem; border-radius: var(--radius);
+            box-shadow: var(--shadow-sm); transition: var(--transition); position: relative; overflow: hidden;
+        }
+        .feature-box::before {
+            content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 4px;
+            background: linear-gradient(90deg, var(--primary), var(--accent)); opacity: 0; transition: var(--transition);
+        }
+        .feature-box:hover { transform: translateY(-10px); box-shadow: var(--shadow-lg); }
+        .feature-box:hover::before { opacity: 1; }
+        
+        .feature-icon {
+            font-size: 2rem; color: var(--primary); margin-bottom: 1.5rem;
+            width: 60px; height: 60px; background: #f0f4f8; border-radius: 12px;
+            display: flex; align-items: center; justify-content: center; transition: var(--transition);
+        }
+        .feature-box:hover .feature-icon { background: var(--primary); color: var(--white); }
+        
+        /* --- SERVICES (Cards with Zoom) --- */
+        .services-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 2rem; }
+        .service-card {
+            background: var(--white); border-radius: var(--radius); overflow: hidden;
+            box-shadow: var(--shadow-sm); group;
+        }
+        .card-img-wrapper { height: 220px; overflow: hidden; position: relative; }
+        .card-img-wrapper img {
+            width: 100%; height: 100%; object-fit: cover; transition: transform 0.6s ease;
+        }
+        .service-card:hover .card-img-wrapper img { transform: scale(1.1); }
+        
+        .card-content { padding: 2rem; }
+        .card-content h3 { font-size: 1.4rem; margin-bottom: 0.5rem; }
+        .card-content ul { margin: 1.5rem 0; }
+        .card-content li { display: flex; align-items: center; gap: 0.8rem; font-size: 0.9rem; margin-bottom: 0.5rem; color: var(--text-light); }
+        .card-content li i { color: var(--success, #38a169); }
+
+        /* --- PAYMENT TICKER --- */
+        .ticker-wrap {
+            width: 100%; overflow: hidden; background: var(--white); padding: 2rem 0;
+            border-top: 1px solid #eee; border-bottom: 1px solid #eee; margin-bottom: 2rem;
+        }
+        .ticker-title { text-align: center; font-size: 0.9rem; text-transform: uppercase; letter-spacing: 2px; color: var(--text-light); margin-bottom: 1.5rem; }
+        .ticker { display: flex; animation: ticker 25s linear infinite; width: max-content; }
+        .ticker-item { padding: 0 3rem; display: flex; align-items: center; opacity: 0.6; transition: 0.3s; filter: grayscale(100%); }
+        .ticker-item:hover { opacity: 1; filter: grayscale(0%); transform: scale(1.1); }
+        
+        /* Fixed height for logos ensures uniformity */
+        .ticker-item img { height: 50px; width: auto; object-fit: contain; max-width: 150px; }
+        
+        @keyframes ticker { 0% { transform: translateX(0); } 100% { transform: translateX(-50%); } }
+
+        /* --- BOOKING SECTION (Split Layout) --- */
+        .booking-section { background: #f1f5f9; }
+        .booking-wrapper { display: grid; grid-template-columns: 1fr 1fr; gap: 4rem; align-items: start; }
+        
+        .booking-info { position: sticky; top: 100px; }
+        .option-tab {
+            background: var(--white); padding: 1.5rem; border-radius: 12px; margin-bottom: 1rem;
+            border: 2px solid transparent; cursor: pointer; transition: var(--transition);
+            display: flex; align-items: center; gap: 1rem;
+        }
+        .option-tab:hover { border-color: #cbd5e1; }
+        .option-tab.active { border-color: var(--primary); background: #f0f9ff; }
+        .option-tab i { font-size: 1.5rem; color: var(--primary); }
+        .option-tab h4 { margin: 0; font-size: 1.1rem; }
+        .option-tab p { margin: 0; font-size: 0.85rem; color: var(--text-light); }
+
+        .booking-form-card {
+            background: var(--white); padding: 2.5rem; border-radius: 20px;
+            box-shadow: var(--shadow-lg);
+        }
+        
+        .form-group { margin-bottom: 1.5rem; position: relative; }
+        .form-group label {
+            display: block; font-size: 0.85rem; font-weight: 700; margin-bottom: 0.5rem;
+            color: var(--text-dark); text-transform: uppercase; letter-spacing: 0.5px;
+        }
+        .form-control {
+            width: 100%; padding: 1rem; border: 2px solid #e2e8f0; border-radius: 10px;
+            font-family: inherit; font-size: 1rem; transition: var(--transition); background: #f8fafc;
+        }
+        .form-control:focus { outline: none; border-color: var(--primary); background: var(--white); box-shadow: 0 0 0 4px rgba(26,54,93,0.1); }
+        
+        .guest-control {
+            display: flex; justify-content: space-between; align-items: center;
+            background: #f8fafc; padding: 0.8rem; border-radius: 10px; border: 2px solid #e2e8f0;
+        }
+        .count-btn {
+            width: 36px; height: 36px; border-radius: 50%; border: none; background: var(--white);
+            box-shadow: var(--shadow-sm); cursor: pointer; color: var(--primary); font-weight: bold;
+        }
+
+        /* --- FOOTER --- */
+        .footer { background: var(--primary-dark); color: #94a3b8; padding: 4rem 0 2rem; font-size: 0.9rem; }
+        .footer-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 3rem; margin-bottom: 3rem; }
+        .footer-title { color: var(--white); font-size: 1.1rem; margin-bottom: 1.5rem; font-weight: 700; }
+        
+        /* Updated Neat Circular Footer Logo */
+        .footer-logo {
+            width: 70px; 
+            height: 70px; 
+            background: var(--white); 
+            border-radius: 50%; 
+            padding: 10px;
+            margin-bottom: 1rem; 
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+        }
+        .footer-logo img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+        }
+
+        .footer-links li { margin-bottom: 0.8rem; }
+        .footer-links a:hover { color: var(--accent); padding-left: 5px; }
+        .footer-bottom { border-top: 1px solid rgba(255,255,255,0.1); padding-top: 2rem; text-align: center; }
+
+        /* --- MOBILE NAV & UTILS --- */
+        @media (max-width: 968px) {
+            .booking-wrapper { grid-template-columns: 1fr; }
+            .booking-info { position: static; margin-bottom: 2rem; }
+            .menu-toggle { display: block; z-index: 1002; }
+            .nav-menu {
+                position: fixed; top: 0; right: 0; width: 80%; height: 100vh;
+                background: var(--white); flex-direction: column; padding: 6rem 2rem;
+                transform: translateX(100%); transition: transform 0.4s ease; box-shadow: -10px 0 30px rgba(0,0,0,0.1);
+            }
+            .nav-menu.active { transform: translateX(0); }
+        }
+
+        /* Animations */
+        @keyframes slideDown { from { transform: translateY(-20px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+    </style>
+</head>
+<body>
+
+    <header class="header" id="header">
+        <div class="nav-container">
+            <div class="logo-box">
+                <img src="https://i.imgur.com/HXSxQAy.png" alt="Logo" onerror="this.style.display='none';">
+                <div class="logo-text">
+                    <h1>TEMPLE EASE ACCESS</h1>
+                    <p>Harare Zimbabwe Temple</p>
+                </div>
+            </div>
+            
+            <button class="menu-toggle" aria-label="Open Menu"><i class="fas fa-bars"></i></button>
+
+            <nav class="nav-menu">
+                <a href="#home" class="nav-link">Home</a>
+                <a href="#about" class="nav-link">About</a>
+                <a href="#services" class="nav-link">Services</a>
+                <a href="#payments" class="nav-link">Payments</a>
+                <a href="#booking" class="nav-btn">Book Now</a>
+            </nav>
+        </div>
+    </header>
+
+    <section id="home" class="hero">
+        <div class="hero-bg"></div>
+        <div class="hero-overlay"></div>
+        <div class="hero-content">
+            <div class="notice-badge">
+                <i class="fas fa-bolt"></i>
+                <span>New: We now accept Western Union & EcoCash transfers!</span>
+            </div>
+            <h1>Your Spiritual Journey,<br>Organized Perfectly.</h1>
+            <p>We handle the logistics—accommodation, transport, and dining—so you can focus entirely on your temple experience in Harare.</p>
+            <div class="hero-btns">
+                <a href="#booking" class="btn btn-primary">Book Your Trip</a>
+                <a href="#services" class="btn btn-glass">View Services</a>
+            </div>
+        </div>
+    </section>
+
+    <div class="container notice-section reveal">
+        <div class="notice-card">
+            <div class="notice-icon"><i class="fas fa-bullhorn"></i></div>
+            <div>
+                <h4 style="margin-bottom: 0.2rem; color: var(--secondary);">Latest Update</h4>
+                <p style="margin: 0; font-size: 0.95rem; color: var(--text-light);">
+                    Booking simplified! You can now pay directly via <strong>Western Union</strong> sending straight to our EcoCash Diaspora account. See the Payments section for details.
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <section id="about" class="section">
+        <div class="container">
+            <div style="text-align: center; max-width: 700px; margin: 0 auto;">
+                <h2 style="font-size: 2.5rem; margin-bottom: 1rem;">Why Choose Us?</h2>
+                <p style="color: var(--text-light);">We provide a VIP experience at rates cheaper than booking directly.</p>
+            </div>
+
+            <div class="features-grid">
+                <div class="feature-box reveal">
+                    <div class="feature-icon"><i class="fas fa-tags"></i></div>
+                    <h3>Best Pricing</h3>
+                    <p>Exclusive deals and discounts you won't find anywhere else. Save money while staying in comfort.</p>
+                </div>
+                <div class="feature-box reveal" style="transition-delay: 100ms;">
+                    <div class="feature-icon"><i class="fas fa-shield-alt"></i></div>
+                    <h3>Secure & Safe</h3>
+                    <p>All our partners are vetted for safety. We ensure secure locations and reliable transport.</p>
+                </div>
+                <div class="feature-box reveal" style="transition-delay: 200ms;">
+                    <div class="feature-icon"><i class="fas fa-concierge-bell"></i></div>
+                    <h3>VIP Service</h3>
+                    <p>From airport pickup to daily shuttles, enjoy a seamless experience tailored to your schedule.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="services" class="section" style="background: #fff;">
+        <div class="container">
+            <div style="text-align: center; margin-bottom: 4rem;">
+                <h2 style="font-size: 2.5rem;">Premium Services</h2>
+                <div style="width: 60px; height: 4px; background: var(--accent); margin: 1rem auto;"></div>
+            </div>
+
+            <div class="services-grid">
+                <div class="service-card reveal">
+                    <div class="card-img-wrapper">
+                        <img src="https://images.unsplash.com/photo-1566073771259-6a8506099945?w=600&q=80" alt="Hotel">
+                    </div>
+                    <div class="card-content">
+                        <h3>Accommodation</h3>
+                        <p style="font-size: 0.9rem; color: var(--text-light);">Comfortable stays ranging from budget to luxury suites.</p>
+                        <ul>
+                            <li><i class="fas fa-check-circle"></i> Walking distance options</li>
+                            <li><i class="fas fa-check-circle"></i> Breakfast included</li>
+                            <li><i class="fas fa-check-circle"></i> Verified safety</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="service-card reveal" style="transition-delay: 100ms;">
+                    <div class="card-img-wrapper">
+                        <img src="https://images.unsplash.com/photo-1449965408869-eaa3f722e40d?w=600&q=80" alt="Transport">
+                    </div>
+                    <div class="card-content">
+                        <h3>Transport</h3>
+                        <p style="font-size: 0.9rem; color: var(--text-light);">Reliable airport transfers and daily temple shuttles.</p>
+                        <ul>
+                            <li><i class="fas fa-check-circle"></i> Professional drivers</li>
+                            <li><i class="fas fa-check-circle"></i> Car hire available</li>
+                            <li><i class="fas fa-check-circle"></i> Punctual service</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="service-card reveal" style="transition-delay: 200ms;">
+                    <div class="card-img-wrapper">
+                        <img src="https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?w=600&q=80" alt="Dining">
+                    </div>
+                    <div class="card-content">
+                        <h3>Dining</h3>
+                        <p style="font-size: 0.9rem; color: var(--text-light);">Curated list of the best local and international restaurants.</p>
+                        <ul>
+                            <li><i class="fas fa-check-circle"></i> Dietary needs met</li>
+                            <li><i class="fas fa-check-circle"></i> Local cuisine</li>
+                            <li><i class="fas fa-check-circle"></i> Quality assured</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="payments" style="background: var(--white); padding-top: 2rem;">
+        <div class="container">
+            <h2 style="text-align: center; font-size: 2rem; margin-bottom: 0.5rem;">Easy Payments</h2>
+            <p style="text-align: center; color: var(--text-light); margin-bottom: 2rem;">Send money directly to our EcoCash Diaspora account via:</p>
+            
+            <div class="ticker-wrap">
+                <div class="ticker">
+                    <div class="ticker-item">
+                        <img src="https://cdn.brandfetch.io/id4i8J_lEo/theme/dark/idmiAQ-XIQ.svg?c=1bxid64Mup7aczewSAYMX&t=1679338244770" alt="Western Union">
+                    </div>
+                    <div class="ticker-item">
+                        <img src="https://cdn.brandfetch.io/idpusz-mLU/theme/dark/logo.svg?c=1bxid64Mup7aczewSAYMX&t=1667837999310" alt="WorldRemit">
+                    </div>
+                    <div class="ticker-item">
+                        <img src="https://cdn.brandfetch.io/idk-bElSjo/w/300/h/95/theme/dark/logo.png?c=1bxid64Mup7aczewSAYMX&t=1760474319535" alt="Mukuru">
+                    </div>
+                    <div class="ticker-item">
+                        <img src="https://cdn.brandfetch.io/idwFjVJ1Tk/theme/dark/logo.svg?c=1bxid64Mup7aczewSAYMX&t=1761826044473" alt="MoneyGram">
+                    </div>
+                    <div class="ticker-item">
+                        <img src="https://cdn.brandfetch.io/idmyZNfIFo/w/1000/h/219/theme/dark/logo.png?c=1bxid64Mup7aczewSAYMX&t=1750873457564" alt="EcoCash">
+                    </div>
+                    <div class="ticker-item">
+                        <img src="https://cdn.brandfetch.io/id46GgMcTW/theme/dark/logo.svg?c=1bxid64Mup7aczewSAYMX&t=1762856928930" alt="Mama Money">
+                    </div>
+                    
+                    <div class="ticker-item">
+                        <img src="https://cdn.brandfetch.io/id4i8J_lEo/theme/dark/idmiAQ-XIQ.svg?c=1bxid64Mup7aczewSAYMX&t=1679338244770" alt="Western Union">
+                    </div>
+                    <div class="ticker-item">
+                        <img src="https://cdn.brandfetch.io/idpusz-mLU/theme/dark/logo.svg?c=1bxid64Mup7aczewSAYMX&t=1667837999310" alt="WorldRemit">
+                    </div>
+                    <div class="ticker-item">
+                        <img src="https://cdn.brandfetch.io/idk-bElSjo/w/300/h/95/theme/dark/logo.png?c=1bxid64Mup7aczewSAYMX&t=1760474319535" alt="Mukuru">
+                    </div>
+                    <div class="ticker-item">
+                        <img src="https://cdn.brandfetch.io/idwFjVJ1Tk/theme/dark/logo.svg?c=1bxid64Mup7aczewSAYMX&t=1761826044473" alt="MoneyGram">
+                    </div>
+                </div>
+            </div>
+
+            <div style="background: #fffbeb; border: 1px solid #fcd34d; border-radius: 12px; padding: 1.5rem; max-width: 800px; margin: 0 auto; display: flex; gap: 1rem; align-items: flex-start; margin-bottom: 2rem;">
+                <i class="fas fa-lightbulb" style="color: #d97706; font-size: 1.5rem; margin-top: 5px;"></i>
+                <div>
+                    <h4 style="color: #92400e; margin-bottom: 0.5rem;">How to Pay via Western Union</h4>
+                    <p style="font-size: 0.9rem; color: #b45309; margin: 0;">Select "Send to Mobile Wallet" -> Country: Zimbabwe -> Provider: EcoCash -> Number: <strong>+263 772 527 284</strong>.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="booking" class="section booking-section">
+        <div class="container booking-wrapper">
+            <div class="booking-info reveal">
+                <h2 style="font-size: 2.5rem; margin-bottom: 1rem;">Customize Your Stay</h2>
+                <p style="margin-bottom: 2rem; color: var(--text-light);">Select your preferences below to auto-fill your request.</p>
+
+                <h5 style="text-transform: uppercase; color: var(--text-light); font-size: 0.8rem; letter-spacing: 1px; margin-bottom: 1rem;">Transport</h5>
+                <div class="option-tab" onclick="selectOption(this, 'transport', 'shuttle')">
+                    <i class="fas fa-shuttle-van"></i>
+                    <div>
+                        <h4>Temple Shuttle</h4>
+                        <p>Daily scheduled rides</p>
+                    </div>
+                </div>
+                <div class="option-tab" onclick="selectOption(this, 'transport', 'private')">
+                    <i class="fas fa-car"></i>
+                    <div>
+                        <h4>Private Chauffeur</h4>
+                        <p>Personal driver 24/7</p>
+                    </div>
+                </div>
+
+                <h5 style="text-transform: uppercase; color: var(--text-light); font-size: 0.8rem; letter-spacing: 1px; margin: 2rem 0 1rem;">Accommodation</h5>
+                <div class="option-tab" onclick="selectOption(this, 'accom', 'standard')">
+                    <i class="fas fa-bed"></i>
+                    <div>
+                        <h4>Standard Room</h4>
+                        <p>Cozy & Affordable</p>
+                    </div>
+                </div>
+                <div class="option-tab" onclick="selectOption(this, 'accom', 'luxury')">
+                    <i class="fas fa-crown"></i>
+                    <div>
+                        <h4>Luxury Suite</h4>
+                        <p>Premium amenities</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="booking-form-card reveal">
+                <h3 style="text-align: center; margin-bottom: 2rem;">Booking Request</h3>
+                <form id="bookingForm" onsubmit="submitBooking(event)">
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+                        <div class="form-group">
+                            <label>First Name</label>
+                            <input type="text" class="form-control" required name="firstName">
+                        </div>
+                        <div class="form-group">
+                            <label>Last Name</label>
+                            <input type="text" class="form-control" required name="lastName">
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label>WhatsApp Number</label>
+                        <input type="tel" class="form-control" required name="phone" placeholder="e.g., +263 712 345 678">
+                    </div>
+
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+                        <div class="form-group">
+                            <label>Check-In</label>
+                            <input type="date" class="form-control" required id="checkin">
+                        </div>
+                        <div class="form-group">
+                            <label>Check-Out</label>
+                            <input type="date" class="form-control" required id="checkout">
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Guests</label>
+                        <div class="guest-control">
+                            <button type="button" class="count-btn" onclick="adjustGuests(-1)">-</button>
+                            <span id="guestCount" style="font-weight: bold;">1 Guest</span>
+                            <button type="button" class="count-btn" onclick="adjustGuests(1)">+</button>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Special Requests</label>
+                        <textarea class="form-control" rows="3" name="message"></textarea>
+                    </div>
+
+                    <input type="hidden" id="selectedTransport" name="transport">
+                    <input type="hidden" id="selectedAccom" name="accom">
+                    <input type="hidden" id="guests" name="guests" value="1">
+
+                    <button type="submit" class="btn btn-primary" style="width: 100%; justify-content: center; padding: 1rem;">
+                        Submit Request <i class="fas fa-paper-plane"></i>
+                    </button>
+                    <p style="text-align: center; font-size: 0.8rem; margin-top: 1rem; color: var(--text-light);">
+                        <i class="fas fa-lock"></i> Your information is secure. We will contact you within 24hrs.
+                    </p>
+                </form>
+            </div>
+        </div>
+    </section>
+
+    <footer class="footer" id="footer">
+        <div class="container">
+            <div class="footer-grid">
+                <div>
+                    <div class="footer-logo">
+                        <img src="https://i.imgur.com/HXSxQAy.png" alt="Logo">
+                    </div>
+                    <p>Your trusted partner for organized temple visits in Zimbabwe.</p>
+                </div>
+                <div class="footer-links">
+                    <h4 class="footer-title">Quick Links</h4>
+                    <ul>
+                        <li><a href="#home">Home</a></li>
+                        <li><a href="#services">Services</a></li>
+                        <li><a href="#payments">Payment Options</a></li>
+                        <li><a href="#booking">Book Now</a></li>
+                    </ul>
+                </div>
+                <div class="footer-links">
+                    <h4 class="footer-title">Contact</h4>
+                    <ul>
+                        <li><i class="fas fa-phone" style="margin-right: 8px;"></i> +263 772 527 284</li>
+                        <li><i class="fab fa-whatsapp" style="margin-right: 8px;"></i> +263 714 684 454</li>
+                        <li><i class="fas fa-envelope" style="margin-right: 8px;"></i> templeeaseaccess@gmail.com</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                &copy; 2025 Temple Ease Access. All rights reserved.
+            </div>
+        </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/emailjs-com@3/dist/email.min.js"></script>
+    <script>
+        // --- 1. Initialize EmailJS ---
+        emailjs.init('F_9z1b_d448pFE4-L'); 
+
+        // --- 2. Scroll Animation Observer ---
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('active');
+                }
+            });
+        }, { threshold: 0.1 });
+
+        document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+
+        // --- 3. Smart Header Hide/Show ---
+        let lastScroll = 0;
+        window.addEventListener('scroll', () => {
+            const currentScroll = window.pageYOffset;
+            const header = document.getElementById('header');
+            
+            if (currentScroll > 100) {
+                header.classList.add('scrolled');
+                if (currentScroll > lastScroll) {
+                    header.classList.add('hidden'); // Scroll Down -> Hide
+                } else {
+                    header.classList.remove('hidden'); // Scroll Up -> Show
+                }
+            } else {
+                header.classList.remove('scrolled');
+                header.classList.remove('hidden');
+            }
+            lastScroll = currentScroll;
+        });
+
+        // --- 4. Mobile Menu ---
+        const menuToggle = document.querySelector('.menu-toggle');
+        const navMenu = document.querySelector('.nav-menu');
+        menuToggle.addEventListener('click', () => {
+            navMenu.classList.toggle('active');
+            const icon = menuToggle.querySelector('i');
+            if(navMenu.classList.contains('active')) {
+                icon.classList.remove('fa-bars');
+                icon.classList.add('fa-times');
+            } else {
+                icon.classList.remove('fa-times');
+                icon.classList.add('fa-bars');
+            }
+        });
+        
+        // Close menu on link click
+        document.querySelectorAll('.nav-link, .nav-btn').forEach(l => {
+            l.addEventListener('click', () => {
+                navMenu.classList.remove('active');
+                menuToggle.querySelector('i').classList.remove('fa-times');
+                menuToggle.querySelector('i').classList.add('fa-bars');
+            });
+        });
+
+        // --- 5. Booking Logic ---
+        let guestCount = 1;
+
+        function adjustGuests(num) {
+            guestCount += num;
+            if(guestCount < 1) guestCount = 1;
+            if(guestCount > 20) guestCount = 20;
+            document.getElementById('guestCount').textContent = guestCount + (guestCount === 1 ? ' Guest' : ' Guests');
+            document.getElementById('guests').value = guestCount;
+        }
+
+        function selectOption(element, type, value) {
+            // Remove active class from siblings
+            const parent = element.parentElement;
+            const siblings = parent.querySelectorAll(`.option-tab[onclick*="'${type}'"]`);
+            siblings.forEach(sib => sib.classList.remove('active'));
+            
+            // Add active to clicked
+            element.classList.add('active');
+            
+            // Update hidden input
+            if(type === 'transport') document.getElementById('selectedTransport').value = value;
+            if(type === 'accom') document.getElementById('selectedAccom').value = value;
+        }
+
+        function submitBooking(e) {
+            e.preventDefault();
+            const form = e.target;
+            
+            // Basic validation
+            if(!form.checkValidity()) {
+                alert('Please fill out all required fields.');
+                return;
+            }
+
+            // Prepare EmailJS params
+            const params = {
+                firstName: form.firstName.value,
+                lastName: form.lastName.value,
+                phone: form.phone.value,
+                checkin: document.getElementById('checkin').value,
+                checkout: document.getElementById('checkout').value,
+                guests: guestCount,
+                transport: document.getElementById('selectedTransport').value || 'Not Selected',
+                accommodation: document.getElementById('selectedAccom').value || 'Not Selected',
+                message: form.message.value
+            };
+
+            const btn = form.querySelector('button[type="submit"]');
+            const originalText = btn.innerHTML;
+            btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Sending...';
+            btn.disabled = true;
+
+            emailjs.send('service_fbuj47b', 'template_4awkswh', params)
+                .then(() => {
+                    alert('Request sent successfully! We will contact you shortly via WhatsApp.');
+                    form.reset();
+                    btn.innerHTML = '<i class="fas fa-check"></i> Sent!';
+                    setTimeout(() => {
+                        btn.innerHTML = originalText;
+                        btn.disabled = false;
+                    }, 3000);
+                })
+                .catch((err) => {
+                    console.error('Email error:', err);
+                    alert('There was an error sending your request. Please message us on WhatsApp directly.');
+                    btn.innerHTML = originalText;
+                    btn.disabled = false;
+                });
+        }
+        
+        // Set Date Min Attributes
+        const today = new Date().toISOString().split('T')[0];
+        document.getElementById('checkin').min = today;
+        document.getElementById('checkout').min = today;
+    </script>
+</body>
+</html>
